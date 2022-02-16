@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,8 @@ namespace AdventureGame
     {
         private static string PublicPlayerKey { get; set; }
         private static string Name { get; set; }
-        private static Dictionary<string, int> Inventory;
+        private static SortedList<string, int> Inventory = new SortedList<string, int>();
+        //private static Dictionary<string, int> Inventory_old;
 
         public Player(string PlayerName)
         {
@@ -24,6 +25,7 @@ namespace AdventureGame
         public void InitializeNewPlayer()
         {
             Player.AddToInventory("money", 100);
+            Player.AddToInventory("mes", 1);
             Player.MakePublicPlayerKey();
             Player.SavePlayer();
             Console.WriteLine("Public key: " + Player.PublicPlayerKey);
@@ -53,40 +55,37 @@ namespace AdventureGame
 
         public static void SavePlayer()
         {
+            Console.WriteLine("Connectie Database succesvol!");
             if (Player.ValidatePlayer())
             {
                 Player.ValidatePlayerInventory();
-
+                return;
             }
             // Save de player objects naar de database
             Database conn = new Database();
             conn.connectdb.Open();
-            Console.WriteLine("Connectie Database succesvol!");
                 
-
             string query = "INSERT INTO players (playerpublickey, username) VALUES (@ppk, @username)";
-            foreach(KeyValuePair<string, int> entry in Player.Inventory)
+            using (var cmd = new MySqlCommand())
             {
-               using (var cmd = new MySqlCommand())
-                   {
-                    cmd.CommandText = query;
-                    cmd.CommandType = System.Data.CommandType.Text;
-                    cmd.Connection = conn.connectdb;
+                cmd.CommandText = query;
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Connection = conn.connectdb;
 
-                    cmd.Parameters.AddWithValue("@ppk", Player.PublicPlayerKey);
-                    cmd.Parameters.AddWithValue("@username", Player.Name);
+                cmd.Parameters.AddWithValue("@ppk", Player.PublicPlayerKey);
+                cmd.Parameters.AddWithValue("@username", Player.Name);
 
-                    cmd.ExecuteNonQuery();
-                    conn.connectdb.Close();
-
-               }
+                cmd.ExecuteNonQuery();
+                conn.connectdb.Close();
             }
+            Console.WriteLine("Player init!");
+            Player.ValidatePlayerInventory(true);
+
             
         }
 
         public static void AddToInventory(string Key, int Value)
         {
-            Player.Inventory = new Dictionary<string, int>();
             Player.Inventory.Add(Key, Value);
         }
 
@@ -103,7 +102,7 @@ namespace AdventureGame
                 cmd.CommandText = sql;
                 cmd.CommandType = System.Data.CommandType.Text;
                 cmd.Connection = conn.connectdb;
-                cmd.Parameters.AddWithValue("@playerpublickey", ppk);
+                cmd.Parameters.AddWithValue("@playerpublickey", (string) ppk);
                 rd = cmd.ExecuteReader();
                 while (rd.Read())
                 {
@@ -113,35 +112,63 @@ namespace AdventureGame
                 }
             }
 
-            Player.ValidatePlayerInventory(true);
             return check;
         }
 
         public static void ValidatePlayerInventory(bool NewPlayer = false)
         {
+            Database conn = new Database();
             // For loop msql player_inventory voor Player.Inventory
             if(NewPlayer)
             {
                 // Als de speler nieuw is inventory -> database
+                string query = "INSERT INTO player_inventory (playerpublickey, name, value) VALUES (@ppk, @name, @value)";
+                foreach (var entry in Player.Inventory)
+                {
+                    conn.connectdb.Open();
+                    Console.WriteLine("Key: " + entry.Key + "\nValue: " + entry.Value);
+                    using (var cmd = new MySqlCommand())
+                    {
+                        cmd.CommandText = query;
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.Connection = conn.connectdb;
+            
+                        cmd.Parameters.AddWithValue("@ppk", (string) Player.PublicPlayerKey);
+                        cmd.Parameters.AddWithValue("@name", (string) entry.Key);
+                        cmd.Parameters.AddWithValue("@value", (int) entry.Value);
+                        
+            
+                        cmd.ExecuteNonQuery();
+                        conn.connectdb.Close();
+            
+                    }
+                }
             }
-            //string query = "INSERT INTO player_inventory (playerpublickey, key, value) VALUES (@ppk, @key, @value)";
-            //foreach (KeyValuePair<string, int> entry in Player.Inventory)
-            //{
-            //    using (var cmd = new MySqlCommand())
-            //    {
-            //        cmd.CommandText = query;
-            //        cmd.CommandType = System.Data.CommandType.Text;
-            //        cmd.Connection = conn.connectdb;
-            //
-            //        cmd.Parameters.Add("@ppk", MySw).Value = Player.PublicPlayerKey;
-            //        cmd.Parameters.Add("@key", ).Value = entry.Key;
-            //        cmd.Parameters.Add("@value", ).Value = entry.Value;
-            //
-            //       cmd.ExecuteNonQuery();
-            //        conn.connectdb.Close();
-            //
-            //    }
-            //}
+            else
+            {
+                conn.connectdb.Open();
+                string sql = "SELECT * FROM player_inventory WHERE playerpublickey = @playerpublickey";
+                MySqlDataReader rd;
+                using (var cmd = new MySqlCommand())
+                {
+                    cmd.CommandText = sql;
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.Connection = conn.connectdb;
+                    cmd.Parameters.AddWithValue("@playerpublickey", Player.PublicPlayerKey);
+                    rd = cmd.ExecuteReader();
+                    while (rd.Read())
+                    {
+                        Player.AddToInventory(rd.GetString("name"), (int) rd.GetInt16("value"));
+                    }
+
+                    foreach (KeyValuePair<string, int> entry in Player.Inventory)
+                    {
+                        Console.WriteLine("Inventory Name: " + entry.Key);
+                        Console.WriteLine("Inventory Value: " + entry.Value);
+                    }
+                }
+            }
+            
         }
     }
 }
