@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using AdventureGame;
 
 namespace AdventureGame
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
             if (args.Length <= 0)
@@ -18,6 +19,7 @@ namespace AdventureGame
             {
                 if(Player.ValidatePlayer(args[0]))
                 {
+                    Player.ValidatePlayerInventory();
                     Console.WriteLine("Welkom terug bij AdventureGame " + Player.getName(args[0]) + "!");
                 } else
                 {
