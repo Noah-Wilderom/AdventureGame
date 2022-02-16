@@ -12,9 +12,13 @@ namespace AdventureGame
 {
     class Player
     {
-        private static string PublicPlayerKey { get; set; }
-        private static string Name { get; set; }
+        public static string PublicPlayerKey { get; private set; }
+        public static string Name { get; private set; }
         private static SortedList<string, int> Inventory = new SortedList<string, int>();
+        private static SortedList<string, int> Weapons = new SortedList<string, int>();
+        public static int Level { get; private set; }
+        public static int Exp { get; private set; }
+        public static int Health { get; private set; }
         //private static Dictionary<string, int> Inventory_old;
 
         public Player(string PlayerName)
@@ -26,25 +30,24 @@ namespace AdventureGame
         public void InitializeNewPlayer()
         {
             Console.Clear();
-            Console.Write("Making new account... ");
+            Console.Write("Nieuw account aan het maken... ");
             using (var progress = new ProgressBar())
             {
                 progress.Report((double) 0 / 100);
                 Thread.Sleep(50);
-                Player.AddToInventory("money", 100);
-                progress.Report((double) 25 / 100);
-                Thread.Sleep(50);
-                Player.AddToInventory("mes", 1);
-                progress.Report((double) 50 / 100);
+                Player.Inventory.Add("money", 100);
+                progress.Report((double) 33 / 100);
                 Thread.Sleep(50);
                 Player.MakePublicPlayerKey();
-                progress.Report((double) 75 / 100);
+                progress.Report((double) 66 / 100);
                 Thread.Sleep(50);
-                Player.SavePlayer();
-                progress.Report((double) 100 / 100);
+                Player.SavePlayer(true, true);
+                progress.Report((double) 99 / 100);
                 Thread.Sleep(50);
-                Console.WriteLine("Done.");
+                progress.Report((double)100 / 100);
+                Thread.Sleep(1000);
                 Console.ReadKey();
+                Console.Clear();
 
             }
             
@@ -73,7 +76,7 @@ namespace AdventureGame
             Player.PublicPlayerKey = string.Join("", KeyArray);
         }
 
-        public static void SavePlayer()
+        public static void SavePlayer(bool FirstSave = false, bool NewPlayer = false)
         {
             if (Player.ValidatePlayer())
             {
@@ -97,14 +100,34 @@ namespace AdventureGame
                 cmd.ExecuteNonQuery();
                 conn.connectdb.Close();
             }
-            Player.ValidatePlayerInventory(true);
+            if(FirstSave) Player.ValidatePlayerInventory(NewPlayer);
 
             
         }
 
-        public static void AddToInventory(string Key, int Value)
+        public static void AddToInventory(string Key, int Value, bool ToDB = true)
         {
             Player.Inventory.Add(Key, Value);
+            if (!ToDB) return;
+            // Save de inventory naar de database
+            Database conn = new Database();
+            conn.connectdb.Open();
+
+            string query = "INSERT INTO player_inventory (playerpublickey, name, value) VALUES (@ppk, @name, @value)";
+            using (var cmd = new MySqlCommand())
+            {
+                cmd.CommandText = query;
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Connection = conn.connectdb;
+
+                cmd.Parameters.AddWithValue("@ppk", Player.PublicPlayerKey);
+                cmd.Parameters.AddWithValue("@name", Key);
+                cmd.Parameters.AddWithValue("@value", Value);
+
+
+                cmd.ExecuteNonQuery();
+                conn.connectdb.Close();
+            }
         }
 
         public static bool ValidatePlayer(string ppk = null)
@@ -175,13 +198,7 @@ namespace AdventureGame
                     rd = cmd.ExecuteReader();
                     while (rd.Read())
                     {
-                        Player.AddToInventory(rd.GetString("name"), (int) rd.GetInt16("value"));
-                    }
-
-                    foreach (var entry in Player.Inventory)
-                    {
-                        Console.WriteLine("Inventory Name: " + entry.Key);
-                        Console.WriteLine("Inventory Value: " + entry.Value);
+                        Player.AddToInventory(rd.GetString("name"), (int) rd.GetInt16("value"), false);
                     }
                 }
             }
