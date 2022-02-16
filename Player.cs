@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using AdventureGame;
@@ -24,10 +25,29 @@ namespace AdventureGame
 
         public void InitializeNewPlayer()
         {
-            Player.AddToInventory("money", 100);
-            Player.AddToInventory("mes", 1);
-            Player.MakePublicPlayerKey();
-            Player.SavePlayer();
+            Console.Clear();
+            Console.Write("Making new account... ");
+            using (var progress = new ProgressBar())
+            {
+                progress.Report((double) 0 / 100);
+                Thread.Sleep(50);
+                Player.AddToInventory("money", 100);
+                progress.Report((double) 25 / 100);
+                Thread.Sleep(50);
+                Player.AddToInventory("mes", 1);
+                progress.Report((double) 50 / 100);
+                Thread.Sleep(50);
+                Player.MakePublicPlayerKey();
+                progress.Report((double) 75 / 100);
+                Thread.Sleep(50);
+                Player.SavePlayer();
+                progress.Report((double) 100 / 100);
+                Thread.Sleep(50);
+                Console.WriteLine("Done.");
+                Console.ReadKey();
+
+            }
+            
             Console.WriteLine("Public key: " + Player.PublicPlayerKey);
         }
 
@@ -55,7 +75,6 @@ namespace AdventureGame
 
         public static void SavePlayer()
         {
-            Console.WriteLine("Connectie Database succesvol!");
             if (Player.ValidatePlayer())
             {
                 Player.ValidatePlayerInventory();
@@ -78,7 +97,6 @@ namespace AdventureGame
                 cmd.ExecuteNonQuery();
                 conn.connectdb.Close();
             }
-            Console.WriteLine("Player init!");
             Player.ValidatePlayerInventory(true);
 
             
@@ -126,7 +144,6 @@ namespace AdventureGame
                 foreach (var entry in Player.Inventory)
                 {
                     conn.connectdb.Open();
-                    Console.WriteLine("Key: " + entry.Key + "\nValue: " + entry.Value);
                     using (var cmd = new MySqlCommand())
                     {
                         cmd.CommandText = query;
@@ -161,7 +178,7 @@ namespace AdventureGame
                         Player.AddToInventory(rd.GetString("name"), (int) rd.GetInt16("value"));
                     }
 
-                    foreach (KeyValuePair<string, int> entry in Player.Inventory)
+                    foreach (var entry in Player.Inventory)
                     {
                         Console.WriteLine("Inventory Name: " + entry.Key);
                         Console.WriteLine("Inventory Value: " + entry.Value);
