@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +10,13 @@ namespace AdventureGame
 {
     class Controller
     {
+
+        public Controller()
+        {
+            Console.WriteLine("Controller class init");
+            Console.ReadKey();
+            Console.Clear();
+            
+        }
     }
 }
