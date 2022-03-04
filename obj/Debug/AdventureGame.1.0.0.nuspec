@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>AdventureGame</id>
+    <version>1.0.0</version>
+    <authors>AdventureGame</authors>
+    <description>Package Description</description>
+    <packageTypes>
+      <packageType name="DotnetTool" />
+    </packageTypes>
+  </metadata>
+  <files>
+    <file src="C:\Users\wilde\source\repos\AdventureGame\obj\DotnetToolSettings.xml" target="tools\net5.0\any\DotnetToolSettings.xml" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\AdventureGame.dll" target="tools\net5.0\any\AdventureGame.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\AdventureGame.deps.json" target="tools\net5.0\any\AdventureGame.deps.json" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\AdventureGame.runtimeconfig.json" target="tools\net5.0\any\AdventureGame.runtimeconfig.json" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\AdventureGame.pdb" target="tools\net5.0\any\AdventureGame.pdb" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\BouncyCastle.Crypto.dll" target="tools\net5.0\any\BouncyCastle.Crypto.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\Google.Protobuf.dll" target="tools\net5.0\any\Google.Protobuf.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\K4os.Compression.LZ4.dll" target="tools\net5.0\any\K4os.Compression.LZ4.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\K4os.Compression.LZ4.Streams.dll" target="tools\net5.0\any\K4os.Compression.LZ4.Streams.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\K4os.Hash.xxHash.dll" target="tools\net5.0\any\K4os.Hash.xxHash.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\Microsoft.Win32.SystemEvents.dll" target="tools\net5.0\any\Microsoft.Win32.SystemEvents.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\MySql.Data.dll" target="tools\net5.0\any\MySql.Data.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\Ubiety.Dns.Core.dll" target="tools\net5.0\any\Ubiety.Dns.Core.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\ZstdNet.dll" target="tools\net5.0\any\ZstdNet.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\System.Configuration.ConfigurationManager.dll" target="tools\net5.0\any\System.Configuration.ConfigurationManager.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\System.Drawing.Common.dll" target="tools\net5.0\any\System.Drawing.Common.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\System.Security.Cryptography.ProtectedData.dll" target="tools\net5.0\any\System.Security.Cryptography.ProtectedData.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\System.Security.Permissions.dll" target="tools\net5.0\any\System.Security.Permissions.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\System.Windows.Extensions.dll" target="tools\net5.0\any\System.Windows.Extensions.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll" target="tools\net5.0\any\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll" target="tools\net5.0\any\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll" target="tools\net5.0\any\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll" target="tools\net5.0\any\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll" />
+    <file src="C:\Users\wilde\source\repos\AdventureGame\bin\Debug\net5.0\publish\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll" target="tools\net5.0\any\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll" />
+  </files>
+</package>

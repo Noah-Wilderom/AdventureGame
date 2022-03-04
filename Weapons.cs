@@ -9,7 +9,7 @@ using AdventureGame;
 
 namespace AdventureGame
 {
-    class Weapons
+    class Weapons : Inventory
     {
         public static SortedList<string, string> getWeaponStats(string name, string ppk = null)
         {
@@ -43,10 +43,33 @@ namespace AdventureGame
             return WeaponStats;
         }
 
-        public static bool AddWeaponToPlayer(string ppk = null) // PlayerPublicKey
+        public bool Add(string Key, int Value) // PlayerPublicKey
         {
-            if (ppk == null) ppk = Player.PublicPlayerKey;
+            Weapons Weapon = new Weapons();
+            if (!Weapon.ValidWeapon(Key)) return false;
+            Inventory.AddInventory(Key, Value, true);
             return true;
+        }   
+
+        public bool ValidWeapon(string Key)
+        {
+            Database conn = new Database();
+            conn.connectdb.Open();
+            string sql = "SELECT * FROM weapons WHERE name = @name";
+            MySqlDataReader rd;
+            using (var cmd = new MySqlCommand())
+            {
+                cmd.CommandText = sql;
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.Connection = conn.connectdb;
+                cmd.Parameters.AddWithValue("@name", (string)Key);
+                rd = cmd.ExecuteReader();
+                while (rd.Read())
+                {
+                    return true;
+                }
+                return false;
+            }
 
         }
 

@@ -23,7 +23,7 @@ namespace AdventureGame
             {
                 if(Player.ValidatePlayer(args[0]))
                 {
-                    Player.SavePlayer(true, false);
+                    Player.SavePlayer();
                     Console.WriteLine("Welkom terug bij AdventureGame " + Player.getName(args[0]) + "!");
                     Controller Controller = new Controller();
                     Controller.OptionMenu();

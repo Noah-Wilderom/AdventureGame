@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "sbLklSPgcctYaahJPvoAaQcrg5Limp/zAeVjCmfTC14gGhDz7BthL6LIEmKLSV7IHXMYxEKswS4ZjNI4eG3+/w==",
+  "dgSpecHash": "pLms5GI6WeRx1osTy/gdz/wE2sFlALH7HNFScEYh6Kp13ue3MuZ69QzQuVvQEF9YJ/PeU91jEP26GCOq4la5eQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\wilde\\source\\repos\\AdventureGame\\AdventureGame.csproj",
   "expectedPackageFiles": [
@@ -23,7 +23,7 @@
     "C:\\Users\\wilde\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
     "C:\\Users\\wilde\\.nuget\\packages\\system.text.encoding.codepages\\4.4.0\\system.text.encoding.codepages.4.4.0.nupkg.sha512",
     "C:\\Users\\wilde\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
-    "C:\\Users\\wilde\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.13\\microsoft.netcore.app.host.win-x64.5.0.13.nupkg.sha512"
+    "C:\\Users\\wilde\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.14\\microsoft.netcore.app.host.win-x64.5.0.14.nupkg.sha512"
   ],
   "logs": []
 }
