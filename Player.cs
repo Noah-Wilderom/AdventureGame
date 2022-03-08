@@ -36,6 +36,8 @@ namespace AdventureGame
                 progress.Report((double)33 / 100);
                 Thread.Sleep(50);
                 Item.Add("money", 100);
+                Item.Add("bread", 5);
+                Item.Add("water", 5);
                 Weapon.Add("mes", 1);
                 progress.Report((double)66 / 100);
                 Thread.Sleep(50);
@@ -55,6 +57,7 @@ namespace AdventureGame
         public static void SavePlayer()
         {
             Inventory Inv = new Inventory();
+            Inv.LoadInventory();
             Inv.Save();
         }
 

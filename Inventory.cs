@@ -6,27 +6,27 @@ namespace AdventureGame
 {
     class Inventory
     {
-        private static SortedList<string, int> Items = new SortedList<string, int>();
-        private static SortedList<string, int> Weapons = new SortedList<string, int>();
+        public static SortedList<string, int> ItemsInventory { get; private set; } = new SortedList<string, int>();
+        public static SortedList<string, int> WeaponsInventory { get; private set; } = new SortedList<string, int>();
 
         public static void AddInventory(string Key, int Value, bool IsWeapon = false)
         {
             if(IsWeapon)
             {
-                if (Weapons.ContainsKey(Key))
+                if (WeaponsInventory.ContainsKey(Key))
                 {
-                    Weapons[Key] += Value;
+                    WeaponsInventory[Key] += Value;
                     return;
                 }
-                Weapons.Add(Key, Value);
+                WeaponsInventory.Add(Key, Value);
                 return;
             }
-            if (Items.ContainsKey(Key))
+            if (ItemsInventory.ContainsKey(Key))
             {
-                Items[Key] += Value;
+                ItemsInventory[Key] += Value;
                 return;
             }
-            Items.Add(Key, Value);
+            ItemsInventory.Add(Key, Value);
             return;
 
         }
@@ -48,8 +48,10 @@ namespace AdventureGame
                 {
                     Inventory.AddInventory(rdItems.GetString("name"), (int)rdItems.GetInt16("value"));
                 }
-            }
+                conn.connectdb.Close();
 
+            }
+            conn.connectdb.Open();
             string sqlWeapons = "SELECT * FROM player_weapons WHERE playerpublickey = @playerpublickey";
             MySqlDataReader rdWeapons;
             using (var cmd = new MySqlCommand())
@@ -63,54 +65,141 @@ namespace AdventureGame
                 {
                     Inventory.AddInventory(rdWeapons.GetString("name"), (int) rdWeapons.GetInt16("value"), true);
                 }
+                conn.connectdb.Close();
+
             }
         }
         /// <summary>
         /// Saves the inventory to the database
-        /// return void
+        /// return void 
         /// </summary>
         public void Save()
         {
             Database conn = new Database();
             string queryItems = "INSERT INTO player_inventory (playerpublickey, name, value) VALUES (@ppk, @name, @value)";
-            foreach (var entry in Items)
+            string queryItemsUpdate = "UPDATE player_inventory SET value = @val WHERE playerpublickey = @ppk";
+            foreach (var entry in ItemsInventory)
             {
+                bool check = false;
                 conn.connectdb.Open();
+                string sql = "SELECT * FROM player_inventory WHERE playerpublickey = @ppk AND name = @name";
+                MySqlDataReader rd;
                 using (var cmd = new MySqlCommand())
                 {
-                    cmd.CommandText = queryItems;
+                    cmd.CommandText = sql;
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.Connection = conn.connectdb;
-
                     cmd.Parameters.AddWithValue("@ppk", (string)Player.PublicPlayerKey);
                     cmd.Parameters.AddWithValue("@name", (string)entry.Key);
-                    cmd.Parameters.AddWithValue("@value", (int)entry.Value);
-
-
-                    cmd.ExecuteNonQuery();
+                    rd = cmd.ExecuteReader();
+                    while (rd.Read())
+                    {
+                        check = true;
+                    }
+                    check = false;
                     conn.connectdb.Close();
-
                 }
+                if (check)
+                {
+                    conn.connectdb.Open();
+                    using (var cmd = new MySqlCommand())
+                    {
+                        cmd.CommandText = queryItemsUpdate;
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.Connection = conn.connectdb;
+
+                        cmd.Parameters.AddWithValue("@ppk", (string)Player.PublicPlayerKey);
+                        cmd.Parameters.AddWithValue("@name", (string)entry.Key);
+                        cmd.Parameters.AddWithValue("@value", (int)entry.Value);
+
+
+                        cmd.ExecuteNonQuery();
+                        conn.connectdb.Close();
+
+                    }
+                }
+                else
+                {
+                    conn.connectdb.Open();
+                    using (var cmd = new MySqlCommand())
+                    {
+                        cmd.CommandText = queryItems;
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.Connection = conn.connectdb;
+
+                        cmd.Parameters.AddWithValue("@ppk", (string)Player.PublicPlayerKey);
+                        cmd.Parameters.AddWithValue("@name", (string)entry.Key);
+                        cmd.Parameters.AddWithValue("@value", (int)entry.Value);
+
+
+                        cmd.ExecuteNonQuery();
+                        conn.connectdb.Close();
+
+                    }
+                }
+
             }
             string queryWeapons = "INSERT INTO player_weapons (playerpublickey, name, value) VALUES (@ppk, @name, @value)";
-            foreach (var entry in Weapons)
+            string queryWeaponsUpdate = "UPDATE player_weapons SET value = @val WHERE playerpublickey = @ppk AND name = @name";
+            foreach (var entry in WeaponsInventory)
             {
+                bool check = false;
                 conn.connectdb.Open();
+                string sql = "SELECT * FROM player_weapons WHERE playerpublickey = @ppk AND name = @name";
+                MySqlDataReader rd;
                 using (var cmd = new MySqlCommand())
                 {
-                    cmd.CommandText = queryWeapons;
+                    cmd.CommandText = sql;
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.Connection = conn.connectdb;
-
                     cmd.Parameters.AddWithValue("@ppk", (string)Player.PublicPlayerKey);
                     cmd.Parameters.AddWithValue("@name", (string)entry.Key);
-                    cmd.Parameters.AddWithValue("@value", (int)entry.Value);
-
-
-                    cmd.ExecuteNonQuery();
+                    rd = cmd.ExecuteReader();
+                    while (rd.Read())
+                    {
+                        check = true;
+                    }
+                    check = false;
                     conn.connectdb.Close();
-
                 }
+                if(check)
+                {
+                    conn.connectdb.Open();
+                    using (var cmd = new MySqlCommand())
+                    {
+                        cmd.CommandText = queryWeaponsUpdate;
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.Connection = conn.connectdb;
+
+                        cmd.Parameters.AddWithValue("@ppk", (string)Player.PublicPlayerKey);
+                        cmd.Parameters.AddWithValue("@name", (string)entry.Key);
+                        cmd.Parameters.AddWithValue("@value", (int)entry.Value);
+
+
+                        cmd.ExecuteNonQuery();
+                        conn.connectdb.Close();
+
+                    }
+                } else
+                {
+                    conn.connectdb.Open();
+                    using (var cmd = new MySqlCommand())
+                    {
+                        cmd.CommandText = queryWeapons;
+                        cmd.CommandType = System.Data.CommandType.Text;
+                        cmd.Connection = conn.connectdb;
+
+                        cmd.Parameters.AddWithValue("@ppk", (string)Player.PublicPlayerKey);
+                        cmd.Parameters.AddWithValue("@name", (string)entry.Key);
+                        cmd.Parameters.AddWithValue("@value", (int)entry.Value);
+
+
+                        cmd.ExecuteNonQuery();
+                        conn.connectdb.Close();
+
+                    }
+                }
+                
             }
         }
         /// <summary>
@@ -128,7 +217,7 @@ namespace AdventureGame
 
             // Als de speler nieuw is inventory -> database
             string query = "INSERT INTO player_inventory (playerpublickey, name, value) VALUES (@ppk, @name, @value)";
-            foreach (var entry in Items)
+            foreach (var entry in ItemsInventory)
             {
                 conn.connectdb.Open();
                 using (var cmd = new MySqlCommand())

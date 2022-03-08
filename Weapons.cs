@@ -43,7 +43,7 @@ namespace AdventureGame
             return WeaponStats;
         }
 
-        public bool Add(string Key, int Value) // PlayerPublicKey
+        public bool Add(string Key, int Value)
         {
             Weapons Weapon = new Weapons();
             if (!Weapon.ValidWeapon(Key)) return false;
@@ -88,7 +88,11 @@ namespace AdventureGame
             }
             Console.ForegroundColor = ConsoleColor.White;
         }
-        
+        /// <summary>
+        ///  Searches trough the weapons table to get the associated label.
+        /// </summary>
+        /// <param name="name">name code of the weapon</param>
+        /// <returns>Returns the label that is associated with the name code.</returns>
         public static string GetLabel(string name)
         {
             Database conn = new Database();
@@ -108,6 +112,19 @@ namespace AdventureGame
                 }
             }
             return "Error geen label kunnen vinden voor " + name;
+        }
+
+        public static void Print()
+        {
+            Console.WriteLine("Player Inventory Items");
+            foreach (var item in Inventory.WeaponsInventory)
+            {
+                Console.Write("Key: ");
+                Console.Write(Weapons.GetLabel(item.Key));
+                Console.Write(" | Value: ");
+                Console.Write(item.Value);
+                Console.Write("\n");
+            }
         }
     }
 }
