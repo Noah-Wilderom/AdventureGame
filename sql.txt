@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`ID`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Data exporteren was gedeselecteerd
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`ID`),
   UNIQUE KEY `playerpublickey` (`playerpublickey`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Data exporteren was gedeselecteerd
 
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `player_inventory` (
   KEY `name` (`name`),
   CONSTRAINT `name_items_inventory` FOREIGN KEY (`name`) REFERENCES `items` (`name`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `playerpublickey_player_inventory` FOREIGN KEY (`playerpublickey`) REFERENCES `players` (`playerpublickey`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Data exporteren was gedeselecteerd
 
@@ -78,11 +78,11 @@ CREATE TABLE IF NOT EXISTS `player_weapons` (
   `damage` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `name` (`name`),
   KEY `playerpublickey` (`playerpublickey`),
+  KEY `name` (`name`),
   CONSTRAINT `playerpublickey_inventory_weapons` FOREIGN KEY (`playerpublickey`) REFERENCES `players` (`playerpublickey`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `weapon_name_player` FOREIGN KEY (`name`) REFERENCES `weapons` (`name`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Data exporteren was gedeselecteerd
 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `weapons` (
   `damage` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Data exporteren was gedeselecteerd
 
